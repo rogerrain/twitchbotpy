@@ -1,6 +1,6 @@
 from Socket import openSocket, closeSocket, sendMessage, sysMessage
 from Initialize import joinRoom
-from Commands import commandList, doComm
+from Commands import commandStrings, doComm
 from Settings import CHANNEL
 import re
 
@@ -17,10 +17,9 @@ def getMessage(line):
     return message
 
 #Attempts to recognize a command given by the user
-def recognize(s, comm):
-    if comm not in commandList:
+def recognize(s, c):
+    if c not in commandStrings:
         return
-    c = comm + "()"
     msg = doComm(c) #Executes the command corresponding to comm
     sendMessage(s, msg)
     return

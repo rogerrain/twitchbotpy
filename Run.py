@@ -2,6 +2,7 @@ from Socket import openSocket, closeSocket, sendMessage, sysMessage
 from Initialize import joinRoom
 from Commands import commandList, doComm
 from Settings import CHANNEL
+import re
 
 #Obtains the username from the given line
 def getUser(line):
@@ -27,6 +28,7 @@ def recognize(s, comm):
 def main():
     s = openSocket()
     joinRoom(s)
+    p = re.compile("!([a-zA-Z]+)") #Setting up pattern to match commands
 
     readBuffer, user, message = "", "", "" #Initializing needed variables
     while True:
@@ -45,10 +47,9 @@ def main():
                 user = getUser(line)
                 message = getMessage(line)
                 print(user + " typed :" + message)
-                if len(message) > 1:
-                    if message[0] == "!":
-                        sep = message.split("!")[1].split(" ")[0].split("\r")
-                        recognize(s, sep[0].lower())
+                m = p.match(message) #Pattern matching for commands
+                if m:
+                    recognize(s, m.group(1))
                 #Checking if the broadcaster called for the bot to quit
                 if "!quit" in message and user == CHANNEL:
                     closeSocket(s)

@@ -1,5 +1,5 @@
 import socket
-from Settings import HOST, PORT, PASS, NICK, CHANNEL
+from Settings import getChannel, getSettings
 
 def toBytes(message):
     """transforms a string into bytes digestible by sockets"""
@@ -7,16 +7,18 @@ def toBytes(message):
 
 def openSocket():
     """opens a socket given the defined settings int he Settings.py file"""
+    host, port, pw, nick, channel = getSettings()
     s = socket.socket()
-    s.connect((HOST, PORT))
-    sysMessage(s, "PASS " + PASS)
-    sysMessage(s, "NICK " + NICK)
-    sysMessage(s, "JOIN #" + CHANNEL)
+    s.connect((host, port))
+    sysMessage(s, "PASS " + pw)
+    sysMessage(s, "NICK " + nick)
+    sysMessage(s, "JOIN #" + channel)
     return s
 
 def sendMessage(s, message):
     """sends a message over the given socket to a channel"""
-    temp = "PRIVMSG #" + CHANNEL + " :" + message
+    channel = getChannel()
+    temp = "PRIVMSG #" + channel + " :" + message
     s.send(toBytes(temp + "\r\n"))
     print("Sent: " + temp)
 
@@ -26,6 +28,7 @@ def sysMessage(s, message):
 
 def closeSocket(s):
     """closes the socket connection gracefully"""
+    channel = getChannel()
     sendMessage(s, "Goodbye!")
-    sysMessage(s, "PART " + CHANNEL)
+    sysMessage(s, "PART " + channel)
     s.close()

@@ -1,7 +1,7 @@
 from Socket import openSocket, closeSocket, sendMessage, sysMessage
 from Initialize import joinRoom
 from Commands import getDict
-from Settings import CHANNEL
+from Settings import getChannel
 import re
 
 def getUser(line):
@@ -27,6 +27,7 @@ def recognize(s, c, cd):
 def main():
     s = openSocket()
     joinRoom(s)
+    channel = getChannel()
     p = re.compile("!([a-zA-Z]+)") #Setting up pattern to match commands
     cd = getDict()
 
@@ -51,7 +52,7 @@ def main():
                 if m:
                     recognize(s, m.group(1), cd)
                 #Checking if the broadcaster called for the bot to quit
-                if "!quit" in message and user == CHANNEL:
+                if "!quit" in message and user == channel:
                     closeSocket(s)
                     return
 

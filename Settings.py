@@ -1,5 +1,42 @@
-HOST = "irc.twitch.tv"
-PORT = 6667
-PASS = "" #GENERATE THIS FROM https://twitchapps.com/tmi/
-NICK = "" #THE NAME OF YOUR BOT (all lowercase)
-CHANNEL = "" #THE NAME OF THE CHANNEL YOU WANT THE BOT TO BE IN
+def getSettings():
+    return getHost(), getPort(), getPass(), getNick(), getChannel()
+
+def getHost():
+    infile = open("Settings.ini", "r")
+    lines = infile.readlines()
+    infile.close()
+    for line in lines:
+        if line.startswith("HOST"):
+            return line.strip().split(" ")[2]
+        
+def getPort():
+    infile = open("Settings.ini", "r")
+    lines = infile.readlines()
+    infile.close()
+    for line in lines:
+        if line.startswith("PORT"):
+            return int(line.strip().split(" ")[2])
+        
+def getPass():
+    infile = open("Settings.ini", "r")
+    lines = infile.readlines()
+    infile.close()
+    for line in lines:
+        if line.startswith("PASS"):
+            return line.strip().split(" ")[2]
+        
+def getNick():
+    infile = open("Settings.ini", "r")
+    lines = infile.readlines()
+    infile.close()
+    for line in lines:
+        if line.startswith("NICK"):
+            return line.strip().split(" ")[2]
+        
+def getChannel():
+    infile = open("Settings.ini", "r")
+    lines = infile.readlines()
+    infile.close()
+    for line in lines:
+        if line.startswith("CHANNEL"):
+            return line.strip().split(" ")[2]

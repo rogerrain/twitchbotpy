@@ -1,26 +1,26 @@
 from Socket import openSocket, closeSocket, sendMessage, sysMessage
 from Initialize import joinRoom
-from Commands import commandStrings, doComm
+from Commands import getDict
 from Settings import CHANNEL
 import re
 
-#Obtains the username from the given line
 def getUser(line):
+    """obtains the username from the given line"""
     separate = line.split(":")
     user = separate[1].split("!")[0]
     return user
 
-#Obtains the message from the given line
 def getMessage(line):
+    """obtains the message from the given line"""
     separate = line.split(":")
     message = separate[2]
     return message
 
-#Attempts to recognize a command given by the user
-def recognize(s, c):
-    if c not in commandStrings:
+def recognize(s, c, cd):
+    """attempts to recognize a command given by the user"""
+    if c not in cd:
         return
-    msg = doComm(c) #Executes the command corresponding to comm
+    msg = cd[c]()
     sendMessage(s, msg)
     return
 
@@ -28,6 +28,7 @@ def main():
     s = openSocket()
     joinRoom(s)
     p = re.compile("!([a-zA-Z]+)") #Setting up pattern to match commands
+    cd = getDict()
 
     readBuffer, user, message = "", "", "" #Initializing needed variables
     while True:
@@ -48,7 +49,7 @@ def main():
                 print(user + " typed :" + message)
                 m = p.match(message) #Pattern matching for commands
                 if m:
-                    recognize(s, m.group(1))
+                    recognize(s, m.group(1), cd)
                 #Checking if the broadcaster called for the bot to quit
                 if "!quit" in message and user == CHANNEL:
                     closeSocket(s)

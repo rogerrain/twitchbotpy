@@ -1,7 +1,7 @@
 from Socket import sendMessage
 
-#Ensures that the bot successfully joined the room and notifies the user
 def joinRoom(s):
+    """Ensures that the bot successfully joined the room"""
     readBuffer = ""
     loading = True
     while loading:
@@ -15,10 +15,6 @@ def joinRoom(s):
             
     sendMessage(s, "Successfully joined chat")
 
-
-#Helper function for joinRoom, checks whether the joining has ended
 def loadingComplete(line):
-    if ("End of /NAMES list" in line):
-        return False
-    else:
-        return True
+    """Helper function for joinRoom, checks whether the joining has ended"""
+    return "End of /NAMES list" not in line

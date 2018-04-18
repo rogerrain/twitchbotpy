@@ -32,29 +32,32 @@ def main():
     cd = getDict()
 
     readBuffer, user, message = "", "", "" #Initializing needed variables
-    while True:
-        readBuffer = readBuffer + s.recv(1024).decode("UTF-8")
-        temp = readBuffer.split("\n")
-        readBuffer = temp.pop()
+    try:
+        while True:
+            readBuffer = readBuffer + s.recv(1024).decode("UTF-8")
+            temp = readBuffer.split("\n")
+            readBuffer = temp.pop()
 
-        for line in temp:
-            if "PING :tmi.twitch.tv" in line:
-                if "PING :tmi.twitch.tv" == line[:19]:
-                    print(line)
-                    sysMessage(s, (line.replace("PING", "PONG")))
+            for line in temp:
+                if "PING :tmi.twitch.tv" in line:
+                    if "PING :tmi.twitch.tv" == line[:19]:
+                        print(line)
+                        sysMessage(s, (line.replace("PING", "PONG")))
+                    else:
+                        sendMessage(s, "Nice try.") #Preventing shennanigans
                 else:
-                    sendMessage(s, "Nice try.") #Preventing shennanigans
-            else:
-                user = getUser(line)
-                message = getMessage(line)
-                print(user + " typed :" + message)
-                m = p.match(message) #Pattern matching for commands
-                if m:
-                    recognize(s, m.group(1), cd)
-                #Checking if the broadcaster called for the bot to quit
-                if "!quit" in message and user == channel:
-                    closeSocket(s)
-                    return
+                    user = getUser(line)
+                    message = getMessage(line)
+                    print(user + " typed :" + message)
+                    m = p.match(message) #Pattern matching for commands
+                    if m:
+                        recognize(s, m.group(1), cd)
+                    #Checking if the broadcaster called for the bot to quit
+                    if "!quit" in message and user == channel:
+                        return
+    finally:
+        closeSocket(s)
+        return
 
 if __name__ == "__main__":
     main()

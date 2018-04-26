@@ -17,6 +17,16 @@ def getLims():
         ld[c] = cd[c]()[1]
     return ld
 
+def commands():
+    #TODO: make this command whisper instead of type in chat
+    """creates a list of commands and sends them as the message"""
+    comms = getDict()
+    msg = "Commands: "
+    for c in comms:
+        msg += "!" + c + " "
+    limit = 30 #Default of 30 seconds, feel free to change
+    return msg, limit
+
 """Example command that could be added:
 def keyboard():
     msg = "Cooler Master CM Storm QuickFire XT Slim Keyboard with Cherry MX \
